@@ -4,53 +4,42 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Countdown</title>
-  <meta name="description" content="Simple countdown to an event." />
-  <meta property="og:title" content="Countdown" />
-  <meta property="og:description" content="Tick tock..." />
   <style>
     :root { --font: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif; }
     html, body { height: 100%; margin: 0; }
     body {
       display: grid;
       place-items: center;
-      background: #0f172a;
-      color: #e2e8f0;
+      background: pink;
+      color: #111;
       font-family: var(--font);
       line-height: 1.4;
     }
-    .wrap { text-align: center; padding: 2rem; max-width: 720px; }
-    h1 { font-size: clamp(1.5rem, 2.5vw + 1rem, 2.75rem); margin: 0 0 0.25rem; }
-    .subtitle { opacity: .8; margin: 0 0 1.5rem; font-size: 1rem; }
+    .wrap { text-align: center; padding: 1rem; max-width: 720px; }
     .grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(70px, 1fr));
-      gap: clamp(.75rem, 1.5vw, 1rem);
-      margin: 1rem 0 1.25rem;
+      gap: 1rem;
+      margin: 1rem 0;
     }
     .cell {
-      background: #111827;
-      border: 1px solid #1f2937;
-      border-radius: 0.75rem;
+      background: rgba(255,255,255,0.8);
+      border-radius: .75rem;
       padding: 1rem;
     }
     .num {
       font-variant-numeric: tabular-nums;
-      font-weight: 700;
-      font-size: clamp(1.75rem, 3vw + 1rem, 3rem);
-      letter-spacing: .02em;
+      font-weight: bold;
+      font-size: clamp(2rem, 4vw + 1rem, 3rem);
     }
-    .label { opacity: .7; font-size: .9rem; margin-top: .25rem; }
+    .label { opacity: .8; font-size: .9rem; margin-top: .25rem; }
     .hidden { display: none; }
-    .done { font-size: 1.25rem; margin-top: .5rem; }
-    footer { margin-top: 1rem; opacity: .65; font-size: .85rem; }
-    a { color: #93c5fd; }
+    .done { font-size: 2rem; font-weight: bold; margin-top: 1rem; }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1 id="title">Countdown</h1>
-    <p class="subtitle" id="subtitle">We're counting down to <span id="when"></span></p>
-
+    <!-- Countdown -->
     <div class="grid" id="grid">
       <div class="cell"><div class="num" id="days">0</div><div class="label">Days</div></div>
       <div class="cell"><div class="num" id="hours">0</div><div class="label">Hours</div></div>
@@ -58,42 +47,22 @@
       <div class="cell"><div class="num" id="secs">0</div><div class="label">Seconds</div></div>
     </div>
 
+    <!-- End message -->
     <div class="done hidden" id="done">🎉 It’s time!</div>
-
-    <footer id="tzNote"></footer>
   </div>
 
 <script>
-  // === DATE AND EVENT LINES ===
-  const EVENT_TITLE = "William's Birthday"; // Appears at the top
-  // Use a full ISO date string. Adjust offset for the date’s DST if needed.
+  // Set event moment (Jan 14, 2026 midnight, UTC-05:00)
   const TARGET = new Date("2026-01-14T00:00:00-05:00");
-  // ============================
-
-  // Update title text
-  document.getElementById("title").textContent = EVENT_TITLE;
-
-  function formatWhen(d) {
-    try {
-      return new Intl.DateTimeFormat(undefined, {
-        dateStyle: "full",
-        timeStyle: "long"
-      }).format(d);
-    } catch (e) {
-      return d.toString();
-    }
-  }
 
   const pad = (n) => String(n).padStart(2, "0");
 
   function tick() {
-    const now = new Date();
-    const diff = TARGET - now; // milliseconds
+    const diff = TARGET - new Date();
 
     if (diff <= 0) {
       document.getElementById("grid").classList.add("hidden");
-      const done = document.getElementById("done");
-      done.classList.remove("hidden");
+      document.getElementById("done").classList.remove("hidden");
       clearInterval(timer);
       return;
     }
@@ -110,16 +79,8 @@
     document.getElementById("secs").textContent  = pad(secs);
   }
 
-  document.getElementById("when").textContent = formatWhen(TARGET);
-  try {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    document.getElementById("tzNote").textContent =
-      "Times shown in your local timezone (" + tz + ").";
-  } catch (e) {
-    document.getElementById("tzNote").textContent =
-      "Times shown in your local timezone.";
-  }
-
   tick();
   const timer = setInterval(tick, 1000);
 </script>
+</body>
+</html>
