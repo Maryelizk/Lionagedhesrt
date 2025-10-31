@@ -15,31 +15,26 @@
       margin: 0;
     }
 
-    /* Full-screen background GIF with fallback color */
+    /* Full-screen GIF background with top padding + fallback color */
     body {
       font-family: var(--font);
-      background: pink center / cover no-repeat fixed;
+      background: pink center top / cover no-repeat fixed;
       background-image: url("OldWilliam.gif");
       color: #111;
       overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+
+      /* ✅ create breathing room above William */
+      padding-top: 8vh;
     }
 
-    /* Dark overlay so countdown is always readable */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.25);
-      backdrop-filter: blur(1px);
-      z-index: -1;
-    }
-
-    /* Countdown container is centered */
+    /* Countdown positioned lower */
     .countdown-wrap {
-      text-align: center;
+      position: fixed;
+      left: 50%;
+      bottom: 3vh; /* ✅ moved lower */
+      transform: translateX(-50%);
       width: min(700px, 95vw);
+      text-align: center;
     }
 
     .grid {
@@ -49,10 +44,9 @@
     }
 
     .cell {
-      background: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.9);
       padding: clamp(0.6rem, 2.5vw, 1.2rem);
       border-radius: .75rem;
-      backdrop-filter: blur(4px);
     }
 
     .num {
@@ -78,14 +72,12 @@
       border-radius: .75rem;
     }
 
-    /* 📱 Responsive layout: 2 columns on small screens */
+    /* 🧒📱 Small screen friendly */
     @media (max-width: 600px) {
       .grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
-
-    /* 📱 Super small screens: stack vertically */
     @media (max-width: 380px) {
       .grid {
         grid-template-columns: 1fr;
@@ -94,8 +86,6 @@
   </style>
 </head>
 <body>
-
-  <div class="overlay"></div>
 
   <div class="countdown-wrap">
     <div class="grid" id="grid">
