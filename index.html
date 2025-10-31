@@ -62,16 +62,16 @@
 
     <footer id="tzNote"></footer>
   </div>
-
+  
 <script>
-  // === EDIT THESE TWO LINES ===
-  //const EVENT_TITLE = "Our Party"; // Appears at the top
-  // Use a full ISO date string. Example below is New York time Dec 31, 2025 11:59 PM.
-  // Adjust the offset for DST on that date: -05:00 (standard) or -04:00 (daylight).
+  // === DATE AND EVENT LINES ===
+  const EVENT_TITLE = "William's Birthday"; // Appears at the top
+  // Use a full ISO date string. Adjust offset for the date’s DST if needed.
   const TARGET = new Date("2026-01-14T00:00:00-05:00");
   // ============================
 
-  document.getElementById("William's Birthday").textContent = EVENT_TITLE;
+  // Update title text
+  document.getElementById("title").textContent = EVENT_TITLE;
 
   function formatWhen(d) {
     try {
@@ -113,13 +113,13 @@
   document.getElementById("when").textContent = formatWhen(TARGET);
   try {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    document.getElementById("tzNote").textContent = "Times shown in your local timezone (" + tz + ").";
+    document.getElementById("tzNote").textContent =
+      "Times shown in your local timezone (" + tz + ").";
   } catch (e) {
-    document.getElementById("tzNote").textContent = "Times shown in your local timezone.";
+    document.getElementById("tzNote").textContent =
+      "Times shown in your local timezone.";
   }
 
   tick();
   const timer = setInterval(tick, 1000);
 </script>
-</body>
-</html>
