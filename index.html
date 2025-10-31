@@ -13,25 +13,27 @@
       height: 100%;
       width: 100%;
       margin: 0;
-    }
-
-    /* Full-screen GIF background with top padding + fallback color */
-    body {
-      font-family: var(--font);
-      background: pink center top / cover no-repeat fixed;
-      background-image: url("OldWilliam.gif");
-      color: #111;
       overflow: hidden;
-
-      /* ✅ create breathing room above William */
-      padding-top: 8vh;
+      font-family: var(--font);
+      background: pink;
     }
 
-    /* Countdown positioned lower */
+    /* ✅ Responsive full-screen GIF that shrinks on phones */
+    .bg-gif {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 100%;
+      height: auto;
+      min-height: 100%;
+      object-fit: contain; /* ✅ show whole GIF, no cropping */
+      z-index: -1;
+    }
+
     .countdown-wrap {
       position: fixed;
       left: 50%;
-      bottom: 3vh; /* ✅ moved lower */
+      bottom: 4vh; /* ✅ low placement */
       transform: translateX(-50%);
       width: min(700px, 95vw);
       text-align: center;
@@ -72,12 +74,14 @@
       border-radius: .75rem;
     }
 
-    /* 🧒📱 Small screen friendly */
+    /* 📱 2 columns on medium screens */
     @media (max-width: 600px) {
       .grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
+
+    /* 📱 1 column on very small screens */
     @media (max-width: 380px) {
       .grid {
         grid-template-columns: 1fr;
@@ -86,6 +90,9 @@
   </style>
 </head>
 <body>
+
+  <!-- ✅ Responsive GIF element -->
+  <img class="bg-gif" src="OldWilliam.gif" alt="William" />
 
   <div class="countdown-wrap">
     <div class="grid" id="grid">
@@ -116,7 +123,6 @@
     document.getElementById("secs").textContent = pad(s % 60);
   }
 
-  document.getElementById("done").classList.add("hidden");
   tick();
   const timer = setInterval(tick, 1000);
 </script>
