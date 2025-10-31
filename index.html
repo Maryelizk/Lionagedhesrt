@@ -13,18 +13,20 @@
       margin: 0;
       overflow: hidden;
       font-family: var(--font);
-      background: pink;
+      background: transparent; /* let the GIF show */
     }
 
+    /* Full-viewport image; ALWAYS visible (no negative z-index) */
     .bg-gif {
       position: fixed;
       inset: 0;
-      margin: 0;
       width: 100vw;
       height: 100vh;
-      object-fit: contain;
-      z-index: -1; /* behind countdown */
-      background: pink;
+      object-fit: contain;       /* show entire GIF, no cropping */
+      z-index: 0;                /* behind countdown, above page bg */
+      background: pink;          /* fallback while loading */
+      pointer-events: none;
+      user-select: none;
     }
 
     .countdown-wrap {
@@ -34,7 +36,7 @@
       transform: translateX(-50%);
       width: min(700px, 95vw);
       text-align: center;
-      z-index: 1;
+      z-index: 1;                /* above the GIF */
     }
 
     .grid {
@@ -49,16 +51,9 @@
       border-radius: .75rem;
     }
 
-    .num {
-      font-weight: 800;
-      font-size: clamp(1.5rem, 6vw, 3.5rem);
-      white-space: nowrap;
-    }
-
+    .num { font-weight: 800; font-size: clamp(1.5rem, 6vw, 3.5rem); white-space: nowrap; }
     .label { opacity: .9; font-size: clamp(0.7rem, 2.5vw, 1.1rem); }
-
     .hidden { display: none !important; }
-
     .done {
       font-size: clamp(1.5rem, 5vw, 3rem);
       font-weight: bold;
@@ -75,12 +70,15 @@
 </head>
 <body>
 
-  <!-- ✅ Responsive GIF chooser -->
-  <picture>
-    <!-- <= 600px wide = use narrow GIF -->
-    <source srcset="NarrowOldWilliam.gif" media="(max-width: 600px)">
-    <!-- Default = big GIF -->
-    <img class="bg-gif" src="OldWilliam_Big.gif" alt="William">
+  <!-- Responsive GIF chooser -->
+  <picture id="bg">
+    <!-- Phones: narrow GIF -->
+    <source srcset="NarrowOldWilliam.gif?v=1" media="(max-width: 600px)">
+    <!-- Default: big GIF -->
+    <img class="bg-gif"
+         src="OldWilliam_Big.gif?v=1"
+         alt="William"
+         onerror="document.body.insertAdjacentHTML('beforeend','<div style=&quot;position:fixed;inset:0;display:grid;place-items:center;z-index:2;background:rgba(255,255,255,.9);font-weight:700&quot;>Could not load GIF. Check filename/case.</div>')">
   </picture>
 
   <div class="countdown-wrap">
@@ -95,21 +93,21 @@
 
 <script>
   const TARGET = new Date("2026-01-14T00:00:00-05:00");
-  const pad = n => String(n).padStart(2, '0');
+  const pad = n => String(n).padStart(2,'0');
 
-  function tick() {
+  function tick(){
     const diff = TARGET - new Date();
-    if (diff <= 0) {
-      document.getElementById("grid").classList.add("hidden");
-      document.getElementById("done").classList.remove("hidden");
+    if (diff <= 0){
+      document.getElementById('grid').classList.add('hidden');
+      document.getElementById('done').classList.remove('hidden');
       clearInterval(timer);
       return;
     }
-    const s = Math.floor(diff / 1000);
-    document.getElementById("days").textContent = Math.floor(s / 86400);
-    document.getElementById("hours").textContent = pad(Math.floor((s % 86400) / 3600));
-    document.getElementById("mins").textContent = pad(Math.floor((s % 3600) / 60));
-    document.getElementById("secs").textContent = pad(s % 60);
+    const s = Math.floor(diff/1000);
+    document.getElementById('days').textContent  = Math.floor(s/86400);
+    document.getElementById('hours').textContent = pad(Math.floor((s%86400)/3600));
+    document.getElementById('mins').textContent  = pad(Math.floor((s%3600)/60));
+    document.getElementById('secs').textContent  = pad(s%60);
   }
 
   tick();
