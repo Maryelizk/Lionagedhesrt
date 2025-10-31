@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Countdown</title>
   <style>
-    :root {
-      --font: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
-    }
+    :root { --font: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif; }
 
     html, body {
       height: 100%;
@@ -15,28 +13,42 @@
       margin: 0;
       overflow: hidden;
       font-family: var(--font);
-      background: pink;
+      background: transparent; /* let the GIF show through */
     }
 
-    /* ✅ Responsive full-screen GIF that shrinks on phones */
+    /* Full-screen, responsive GIF that shrinks on phones; always visible */
     .bg-gif {
-      position: absolute;
+      position: fixed;
       inset: 0;
-      margin: auto;
-      width: 100%;
-      height: auto;
-      min-height: 100%;
-      object-fit: contain; /* ✅ show whole GIF, no cropping */
-      z-index: -1;
+      margin: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;  /* show entire GIF, no cropping */
+      z-index: 0;           /* behind countdown, above page background */
+      background: pink;     /* fallback color while loading */
     }
+
+    /* Optional "loading" text (hidden once GIF loads) */
+    .loading {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      z-index: 0;          /* same layer as GIF */
+      color: #444;
+      font-weight: 600;
+      background: transparent;
+    }
+    .loading.hidden { display: none; }
 
     .countdown-wrap {
       position: fixed;
       left: 50%;
-      bottom: 4vh; /* ✅ low placement */
+      bottom: 4vh;
       transform: translateX(-50%);
       width: min(700px, 95vw);
       text-align: center;
+      z-index: 1;          /* above the GIF */
     }
 
     .grid {
@@ -57,11 +69,7 @@
       white-space: nowrap;
     }
 
-    .label {
-      opacity: .9;
-      font-size: clamp(0.7rem, 2.5vw, 1.1rem);
-      margin-top: 0.25rem;
-    }
+    .label { opacity: .9; font-size: clamp(0.7rem, 2.5vw, 1.1rem); margin-top: 0.25rem; }
 
     .hidden { display: none !important; }
     .done {
@@ -74,25 +82,24 @@
       border-radius: .75rem;
     }
 
-    /* 📱 2 columns on medium screens */
-    @media (max-width: 600px) {
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    /* 📱 1 column on very small screens */
-    @media (max-width: 380px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
+    @media (max-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 380px) { .grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
-  <!-- ✅ Responsive GIF element -->
-  <img class="bg-gif" src="OldWilliam_Big.gif" alt="William" />
+  <!-- Loading placeholder (auto-hides on load) -->
+  <div id="loading" class="loading">Loading image…</div>
+
+  <!-- Full-screen, responsive GIF -->
+  <!-- Make sure the filename/case matches exactly and the file is in repo root -->
+  <img
+    class="bg-gif"
+    src="OldWilliam_Big.gif"
+    alt="William"
+    onload="document.getElementById('loading').classList.add('hidden')"
+    onerror="document.getElementById('loading').textContent='Could not load OldWilliam_Big.gif';"
+  />
 
   <div class="countdown-wrap">
     <div class="grid" id="grid">
@@ -117,10 +124,10 @@
       return;
     }
     const s = Math.floor(diff / 1000);
-    document.getElementById("days").textContent = Math.floor(s / 86400);
+    document.getElementById("days").textContent  = Math.floor(s / 86400);
     document.getElementById("hours").textContent = pad(Math.floor((s % 86400) / 3600));
-    document.getElementById("mins").textContent = pad(Math.floor((s % 3600) / 60));
-    document.getElementById("secs").textContent = pad(s % 60);
+    document.getElementById("mins").textContent  = pad(Math.floor((s % 3600) / 60));
+    document.getElementById("secs").textContent  = pad(s % 60);
   }
 
   tick();
