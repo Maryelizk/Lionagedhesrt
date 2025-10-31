@@ -15,30 +15,47 @@
       font-family: var(--font);
       line-height: 1.4;
     }
-    .wrap { text-align: center; padding: 1rem; max-width: 720px; }
+    .wrap { text-align: center; padding: 1rem; max-width: 720px; width: 100%; }
+    .hero {
+      display: block;
+      margin: 1rem auto 0.75rem;
+      width: min(520px, 92vw);
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.12);
+    }
     .grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(70px, 1fr));
       gap: 1rem;
-      margin: 1rem 0;
-    } 
+      margin: 0.75rem auto 1rem;
+      width: min(720px, 95vw);
+    }
     .cell {
-      background: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.85);
       border-radius: .75rem;
       padding: 1rem;
     }
     .num {
       font-variant-numeric: tabular-nums;
-      font-weight: bold;
+      font-weight: 800;
       font-size: clamp(2rem, 4vw + 1rem, 3rem);
     }
     .label { opacity: .8; font-size: .9rem; margin-top: .25rem; }
     .hidden { display: none; }
     .done { font-size: 2rem; font-weight: bold; margin-top: 1rem; }
+    @media (prefers-reduced-motion: reduce) {
+      .hero { animation: none !important; }
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
+    <!-- GIF above the countdown -->
+    <!-- If your GIF file is in the repo root, use src="party.gif".
+         -->
+    <img class="hero" src="OldWilliam.gif" alt="Celebration" loading="lazy" decoding="async" />
+
     <!-- Countdown -->
     <div class="grid" id="grid">
       <div class="cell"><div class="num" id="days">0</div><div class="label">Days</div></div>
@@ -52,7 +69,8 @@
   </div>
 
 <script>
-  // Set event moment (Jan 14, 2026 midnight, UTC-05:00)
+  // Set your event moment:
+  // Example: Jan 14, 2026 at 00:00 in New York time (UTC-05:00 in January).
   const TARGET = new Date("2026-01-14T00:00:00-05:00");
 
   const pad = (n) => String(n).padStart(2, "0");
