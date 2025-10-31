@@ -73,11 +73,13 @@
       border-radius: .75rem;
     }
 
-    /* Phones: allow side crop (≈ cover) + tighter spacing */
+    /* Phones: less cropping
     @media (max-width: 600px) {
       .bg-gif {
-        object-fit: cover;            /* allows ~15% side crop */
-        object-position: center;      /* centered vertically */
+        /* ✅ less cropping than full cover */
+        object-fit: contain;
+        transform: scale(1.08); /* zoom ~8% to reduce side bars */
+        object-position: center center;
       }
       .countdown-wrap {
         bottom: 2.5vh;
@@ -91,14 +93,9 @@
       .num  { font-size: clamp(1.1rem, 5.5vw, 2.75rem); }
     }
 
-    /* Super narrow: stack the counters */
-    @media (max-width: 380px) {
-      .grid { grid-template-columns: 1fr; }
-      .countdown-wrap { bottom: 2vh; }
-    }
-  </style>
-</head>
-<body>
+      </style>
+    </head>
+    <body>
 
   <!-- Responsive GIF chooser (phone vs desktop) -->
   <picture>
