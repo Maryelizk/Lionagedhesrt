@@ -75,23 +75,45 @@
 
     /* Phones: less cropping */
     @media (max-width: 600px) {
+      /* ✅ Use flexbox to center GIF + countdown vertically */
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;   /* vertical centering */
+        align-items: center;       /* horizontal centering */
+        overflow: hidden;
+      }
+
       .bg-gif {
+        position: static;          /* ✅ allow flexbox to center it */
+        width: auto;
+        height: 60vh;              /* ✅ shrinks to fit screen nicely */
         object-fit: contain;
-        transform: scale(1.08); /* zoom ~8% to reduce side bars */
-        object-position: center center;
+        transform: none;           /* remove scaling because we center now */
+        background: pink;
       }
+
       .countdown-wrap {
-        bottom: 4vh;
+        position: static;          /* ✅ let it flow under the GIF */
+        margin-top: 1rem;          /* spacing between GIF + countdown */
         width: min(500px, 90vw);
+        text-align: center;
+        transform: none;
       }
+
       .grid {
         grid-template-columns: repeat(2, 1fr);
         gap: .75rem;
       }
-      .cell { padding: clamp(0.4rem, 1.5vw, 0.9rem); }
-      .num  { font-size: clamp(1.1rem, 5.5vw, 2.75rem); }
-    }
 
+      .cell {
+        padding: clamp(0.4rem, 1.5vw, 0.9rem);
+      }
+
+      .num {
+        font-size: clamp(1.2rem, 6vw, 2.75rem);
+      }
+    }
       </style>
     </head>
     <body>
